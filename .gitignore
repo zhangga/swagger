@@ -19,3 +19,14 @@
 
 # Go workspace file
 go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode
+
+# MacOS
+.DS_Store
+
+/bin
+kubeconfig

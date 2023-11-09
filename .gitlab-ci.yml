@@ -1,0 +1,38 @@
+variables:
+  # 国内测试harbor
+  HARBOR_CN: 'harbor-cn.xxxxx.cn'
+  # global，生产发布
+  HARBOR_GLOBAL: 'harbor.xxxxx.com'
+  # 更新dev环境镜像api
+  UPDATE_IMAGE_API: 'http://devops.xxxxx.io.com:10880/k8s/image'
+
+stages:
+  - lint
+  - test
+  - publish
+  - deploy
+
+job_lint:
+  stage: lint
+  script:
+    - make lint
+
+job_test:
+  stage: test
+  script:
+    - make test
+
+job_publish:
+  stage: publish
+  script:
+    - docker build --build-arg NETRC_LOGIN=$NETRC_LOGIN --build-arg NETRC_PASSWORD=$NETRC_PASSWORD -t $HARBOR_CN/zhangga/swagger:$CI_COMMIT_SHORT_SHA .
+    - docker tag $HARBOR_CN/zhangga/swagger:$CI_COMMIT_SHORT_SHA $HARBOR_CN/zhangga/swagger:latest
+    - docker tag $HARBOR_CN/zhangga/swagger:$CI_COMMIT_SHORT_SHA $HARBOR_GLOBAL/zhangga/swagger:$CI_COMMIT_SHORT_SHA
+    - docker tag $HARBOR_CN/zhangga/swagger:$CI_COMMIT_SHORT_SHA $HARBOR_GLOBAL/zhangga/swagger:latest
+    - docker push $HARBOR_CN/zhangga/swagger:$CI_COMMIT_SHORT_SHA
+    - docker push $HARBOR_CN/zhangga/swagger:latest
+    - docker push $HARBOR_GLOBAL/zhangga/swagger:$CI_COMMIT_SHORT_SHA
+    - docker push $HARBOR_GLOBAL/zhangga/swagger:latest
+    - docker rmi -f $HARBOR_CN/zhangga/swagger:$CI_COMMIT_SHORT_SHA
+    - docker rmi -f $HARBOR_GLOBAL/zhangga/swagger:$CI_COMMIT_SHORT_SHA
+  when: manual
