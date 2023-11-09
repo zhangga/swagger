@@ -1,0 +1,90 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Battle API
+    version: 0.0.1
+paths:
+    /api/battle/action:
+        get:
+            tags:
+                - Battle
+            description: 战斗操作
+            operationId: Battle_BattleAction
+            parameters:
+                - name: battleId
+                  in: query
+                  schema:
+                    type: string
+                - name: pid
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.battle.BattleActionReply'
+    /api/battle/create:
+        get:
+            tags:
+                - Battle
+            description: 创建战斗
+            operationId: Battle_CreateBattle
+            parameters:
+                - name: kid
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: atk.id
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: atk.name
+                  in: query
+                  schema:
+                    type: string
+                - name: def.id
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: def.name
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.battle.CreateBattleReply'
+components:
+    schemas:
+        api.battle.BattleActionReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: enum
+                battleId:
+                    type: string
+            description: 战斗操作返回
+        api.battle.CreateBattleReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: enum
+                battleId:
+                    type: string
+            description: 创建战斗返回
+tags:
+    - name: Battle

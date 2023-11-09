@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	swaggerfileserver "github.com/zhangga/swagger/swagger_file_example"
+
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/zhangga/swagger/swagger"
 	"github.com/zhangga/swagger/version"
@@ -26,6 +28,9 @@ func init() {
 func main() {
 	flag.Parse()
 	fmt.Println(version.Print())
+
+	// 启动一个测试的swagger file server，用于测试
+	swaggerfileserver.RunTestSwaggerFileServer()
 
 	swagger.SwaggerHost = yamlHost
 
@@ -69,7 +74,7 @@ func main() {
 		panic(fmt.Errorf("swagger server listen failed: %w", err))
 	}
 
-	fmt.Printf("swagger server listen on: http://%s/swagger-ui\n", listener.Addr().String())
+	fmt.Printf("swagger server listen on: http://%s/swagger-ui/\n", listener.Addr().String())
 
 	server := http.Server{
 		Handler:      &serveMux,
