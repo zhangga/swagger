@@ -9,7 +9,8 @@ SERVER_VERSION	?= $(shell git describe --long --tags --dirty --always)
 SERVER_VERSION	?= unkonwn
 BUILD_TIME      ?= $(shell date "+%F_%T_%Z")
 COMMIT_SHA1     ?= $(shell git show -s --format=%h)
-VERSION_PACKAGE	?=github.com/zhangga/swagger/version
+VERSION_PACKAGE	?= github.com/zhangga/swagger/version
+API_PROTO_FILES	?= $(shell find swagger_file_example -name *.proto)
 
 VERSION_BUILD_LDFLAGS= \
 -X "${VERSION_PACKAGE}.Version=${SERVER_VERSION}" \
@@ -27,6 +28,14 @@ build:
 # run
 run:
 	go run main.go
+
+.PHONY: api
+# generate api proto
+api:
+	protoc \
+		--proto_path=./swagger_file_example:./third_party \
+		--openapi_out=fq_schema_naming=true,default_response=false:./swagger_file_example \
+		$(API_PROTO_FILES)
 
 .PHONY: test
 # run all test

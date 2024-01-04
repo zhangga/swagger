@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package api.swaggerfileserver;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/zhangga/swagger/api/swaggerfileserver;swaggerfileserver";
+
+// 测试服务
+service Example {
+  // 测试接口
+  rpc ExampleTest (ExampleRequest) returns (ExampleReply) {
+    //用于设置http
+    option (google.api.http) = {
+      get: "/api/example/test",
+      additional_bindings {
+        post: "/api/example/test",
+        body: "*",
+      }
+    };
+  }
+
+}
+
+message ExampleRequest {
+  string api = 1; // 接口名称
+  string ticket = 2; // 加签数据校验
+  map<string, string> params = 3; // 请求参数
+}
+
+message ExampleReply {
+  int32 code = 1; // 0-成功, 其他-错误
+  StatusCode status = 2; // token状态
+  string token = 3; // token信息
+}
+
+enum StatusCode {
+  Pass = 0; // 成功
+  Rejected = 1; // 拒绝
+  Queue = 2; // 排队中
+}
