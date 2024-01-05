@@ -3,8 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: Example API
-    description: 测试服务
+    title: ""
     version: 0.0.1
 paths:
     /api/example/test:
@@ -29,6 +28,23 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.swaggerfileserver.ExampleReply'
+    /api/grace/sayhello:
+        get:
+            tags:
+                - Grace
+            operationId: Grace_SayHello
+            parameters:
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.swaggerfileserver.SayHelloReply'
 components:
     schemas:
         api.swaggerfileserver.ExampleReply:
@@ -42,5 +58,15 @@ components:
                     format: enum
                 token:
                     type: string
+        api.swaggerfileserver.SayHelloReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                content:
+                    type: string
 tags:
     - name: Example
+      description: 测试服务
+    - name: Grace
