@@ -3,11 +3,16 @@ CUR_DIR=$(shell pwd)
 OUT_DIR=$(CUR_DIR)/out
 
 compile:
+	mkdir -p $(OUT_DIR)
 	#go tool compile -S -N -l -o $(OUT_DIR)/originfun.o ./origingunc > $(OUT_DIR)/originfun.s
 	#go tool compile -S -N -l -o $(OUT_DIR)/main.o . > $(OUT_DIR)/main.s
 	go build -gcflags="-S -N -l" -o $(OUT_DIR)/main . 2> $(OUT_DIR)/main.s
 build:
-	go build -gcflags="-N -l" -o $(OUT_DIR)/main main.go
+	mkdir -p $(OUT_DIR)
+	go build -gcflags="-N -l" -o $(OUT_DIR)/main .
+
+run:
+	$(OUT_DIR)/main
 
 # show help
 help:
